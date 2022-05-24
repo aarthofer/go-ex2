@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/aarthofer/go-ex2"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -15,6 +16,14 @@ import (
 )
 
 var a main.App
+
+// init is invoked before main()
+func init() {
+	// loads values from .env into the system
+	if err := godotenv.Load(); err != nil {
+		log.Print("No .env file found")
+	}
+}
 
 func TestMain(m *testing.M) {
 	a.Initialize(
@@ -161,7 +170,7 @@ func TestCatsToPower(t *testing.T) {
 	var originalList []map[string]interface{}
 	json.Unmarshal(responseAll.Body.Bytes(), &originalList)
 
-	reqCat, _ := http.NewRequest("PUT", "/catToPower", nil)
+	reqCat, _ := http.NewRequest("PUT", "/catsToPower", nil)
 	responseCat := executeRequest(reqCat)
 	checkResponseCode(t, http.StatusOK, responseCat.Code)
 
@@ -178,7 +187,7 @@ func TestCatsToPower(t *testing.T) {
 
 	for i := range newList {
 		fmt.Println(newList[i]["name"]) // This prints '0', two times
-		if !strings.HasPrefix(newList[i]["name"].(string), "Kitty - ") {
+		if !strings.HasPrefix(newList[i]["name"].(string), os.Getenv("CatPowerName")) {
 			t.Errorf("Name of product %f not updated: %s\n", newList[i]["id"].(float64), newList[i]["name"].(string))
 		}
 	}

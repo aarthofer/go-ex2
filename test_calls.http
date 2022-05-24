@@ -15,7 +15,7 @@ Content-Type: application/json
 
 ###
 
-DELETE {{url}}/product/3
+DELETE {{url}}/product/1
 
 ###
 
@@ -23,3 +23,7 @@ PUT {{url}}/product/2
 Content-Type: application/json
 
 {"name":"updated product", "price": 11.22}
+
+###
+
+PUT {{url}}/catsToPower

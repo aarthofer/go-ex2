@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -42,6 +44,7 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
+	a.Router.HandleFunc("/catsToPower", a.catsToPower).Methods("PUT")
 }
 
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
@@ -143,6 +146,19 @@ func (a *App) deleteProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
+}
+
+func (a *App) catsToPower(w http.ResponseWriter, r *http.Request) {
+	products, err := getProducts(a.DB, 0, math.MaxInt)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	for _, element := range products {
+		element.Name = os.Getenv("CatPowerName") + element.Name
+		element.updateProduct(a.DB)
+	}
 }
 
 func respondWithError(w http.ResponseWriter, code int, message string) {
