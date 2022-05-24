@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"errors"
 )
 
 type product struct {
@@ -11,44 +10,57 @@ type product struct {
 	Price float64 `json:"price"`
 }
 
-func TestDeleteProduct(t *testing.T) {
-    clearTable()
-    addProducts(1)
+func getProducts(db *sql.DB, start, count int) ([]product, error) {
+	rows, err := db.Query(
+		"SELECT id, name,  price FROM products LIMIT $1 OFFSET $2",
+		count, start)
 
-    req, _ := http.NewRequest("GET", "/product/1", nil)
-    response := executeRequest(req)
-    checkResponseCode(t, http.StatusOK, response.Code)
+	if err != nil {
+		return nil, err
+	}
 
-    req, _ = http.NewRequest("DELETE", "/product/1", nil)
-    response = executeRequest(req)
+	defer rows.Close()
 
-    checkResponseCode(t, http.StatusOK, response.Code)
+	products := []product{}
 
-    req, _ = http.NewRequest("GET", "/product/1", nil)
-    response = executeRequest(req)
-    checkResponseCode(t, http.StatusNotFound, response.Code)
+	for rows.Next() {
+		var p product
+		if err := rows.Scan(&p.ID, &p.Name, &p.Price); err != nil {
+			return nil, err
+		}
+		products = append(products, p)
+	}
+
+	return products, nil
 }
 
-func getProducts(db *sql.DB, start, count int) ([]product, error) {
-    rows, err := db.Query(
-        "SELECT id, name,  price FROM products LIMIT $1 OFFSET $2",
-        count, start)
+func (p *product) getProduct(db *sql.DB) error {
+	return db.QueryRow("SELECT name, price FROM products WHERE id=$1",
+		p.ID).Scan(&p.Name, &p.Price)
+}
 
-    if err != nil {
-        return nil, err
-    }
+func (p *product) createProduct(db *sql.DB) error {
+	err := db.QueryRow(
+		"INSERT INTO products(name, price) VALUES($1, $2) RETURNING id",
+		p.Name, p.Price).Scan(&p.ID)
 
-    defer rows.Close()
+	if err != nil {
+		return err
+	}
 
-    products := []product{}
+	return nil
+}
 
-    for rows.Next() {
-        var p product
-        if err := rows.Scan(&p.ID, &p.Name, &p.Price); err != nil {
-            return nil, err
-        }
-        products = append(products, p)
-    }
+func (p *product) updateProduct(db *sql.DB) error {
+	_, err :=
+		db.Exec("UPDATE products SET name=$1, price=$2 WHERE id=$3",
+			p.Name, p.Price, p.ID)
 
-    return products, nil
+	return err
+}
+
+func (p *product) deleteProduct(db *sql.DB) error {
+	_, err := db.Exec("DELETE FROM products WHERE id=$1", p.ID)
+
+	return err
 }

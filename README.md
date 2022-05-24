@@ -10,9 +10,14 @@ Travis-CI Build Status: [![Build Status](https://app.travis-ci.com/mrckurz/go-mu
   * make sure user/role 'postgres' is available
   * environment variables properly set
      * export APP\_DB_USERNAME=postgres
-	  * export APP\_DB_PASSWORD=\<whatever password you use>
+	  * export APP\_DB_PASSWORD=\postgres
 	 * export APP\_DB_NAME=postgres
 3. GoLang installed (see [golang.org](https://golang.org))
+
+
+## Run the Project in CMD
+1. Tests DB: docker run -p 5432:5432 --name some-postgres -e POSTGRES_PASSWORD=postgres -d postgres
+2. UnitTests: go test -v
 
 
 ### Hints/Info

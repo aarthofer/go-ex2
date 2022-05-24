@@ -1,0 +1,25 @@
+
+
+GET {{url}}/products
+
+###
+
+GET {{url}}/product/2
+
+###
+
+POST {{url}}/product
+Content-Type: application/json
+
+{"name":"test product", "price": 11.22}
+
+###
+
+DELETE {{url}}/product/3
+
+###
+
+PUT {{url}}/product/2
+Content-Type: application/json
+
+{"name":"updated product", "price": 11.22}
