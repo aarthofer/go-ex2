@@ -18,6 +18,8 @@ Travis-CI Build Status: [![Build Status](https://app.travis-ci.com/mrckurz/go-mu
 ## Run the Project in CMD
 1. Tests DB: docker run -p 5432:5432 --name some-postgres -e POSTGRES_PASSWORD=postgres -d postgres
 2. UnitTests: go test -v
+3. Start Service: go run .
+   1. Test calls with the test_calls.http File (only Jetbrains-Golang) - with VSCode you need httpYAC extension, the popular "http rest" extension does not work with this format
 
 
 ### Hints/Info
