@@ -30,4 +30,4 @@ PUT {{url}}/catsToPower
 
 ###
 
-GET {{url}}/product/search/prod
+GET {{url}}/product/search/kit

@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"strings"
 )
 
 type product struct {
@@ -36,8 +37,8 @@ func getProducts(db *sql.DB, start, count int) ([]product, error) {
 
 func filterProducts(db *sql.DB, start, count int, searchText string) ([]product, error) {
 	rows, err := db.Query(
-		"SELECT id, name,  price FROM products WHERE name LIKE '%' || $3 || '%' LIMIT $1 OFFSET $2",
-		count, start, searchText)
+		"SELECT id, name,  price FROM products WHERE LOWER(name) LIKE '%' || $3 || '%' LIMIT $1 OFFSET $2",
+		count, start, strings.ToLower(searchText))
 
 	if err != nil {
 		return nil, err
