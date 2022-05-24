@@ -10,7 +10,7 @@ Travis-CI Build Status: [![Build Status](https://app.travis-ci.com/mrckurz/go-mu
   * make sure user/role 'postgres' is available
   * environment variables properly set
      * export APP\_DB_USERNAME=postgres
-	  * export APP\_DB_PASSWORD=\postgres
+	  * export APP\_DB_PASSWORD=postgres
 	 * export APP\_DB_NAME=postgres
 3. GoLang installed (see [golang.org](https://golang.org))
 
