@@ -215,7 +215,7 @@ func TestSearchProducts(t *testing.T) {
 	var filtered []map[string]interface{}
 	json.Unmarshal(response.Body.Bytes(), &filtered)
 
-	if len(filtered) == len(filtered) {
+	if len(filtered) == len(unfiltered) {
 		t.Errorf("filtered and unfiltered list have same length!")
 	}
 }

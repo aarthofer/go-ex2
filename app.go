@@ -45,6 +45,7 @@ func (a *App) initializeRoutes() {
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")
 	a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
 	a.Router.HandleFunc("/catsToPower", a.catsToPower).Methods("PUT")
+	a.Router.HandleFunc("/product/search/{searchText}", a.filterProduct).Methods("GET")
 }
 
 func (a *App) getProduct(w http.ResponseWriter, r *http.Request) {
@@ -159,6 +160,28 @@ func (a *App) catsToPower(w http.ResponseWriter, r *http.Request) {
 		element.Name = os.Getenv("CatPowerName") + element.Name
 		element.updateProduct(a.DB)
 	}
+}
+
+func (a *App) filterProduct(w http.ResponseWriter, r *http.Request) {
+	count, _ := strconv.Atoi(r.FormValue("count"))
+	start, _ := strconv.Atoi(r.FormValue("start"))
+	vars := mux.Vars(r)
+	searchText := vars["searchText"]
+
+	if count > 10 || count < 1 {
+		count = 10
+	}
+	if start < 0 {
+		start = 0
+	}
+
+	products, err := filterProducts(a.DB, start, count, searchText)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, products)
 }
 
 func respondWithError(w http.ResponseWriter, code int, message string) {

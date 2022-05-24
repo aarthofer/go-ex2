@@ -11,7 +11,7 @@ GET {{url}}/product/2
 POST {{url}}/product
 Content-Type: application/json
 
-{"name":"test product", "price": 11.22}
+{"name":"test asdf", "price": 22.22}
 
 ###
 
@@ -27,3 +27,7 @@ Content-Type: application/json
 ###
 
 PUT {{url}}/catsToPower
+
+###
+
+GET {{url}}/product/search/prod

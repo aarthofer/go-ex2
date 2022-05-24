@@ -34,6 +34,30 @@ func getProducts(db *sql.DB, start, count int) ([]product, error) {
 	return products, nil
 }
 
+func filterProducts(db *sql.DB, start, count int, searchText string) ([]product, error) {
+	rows, err := db.Query(
+		"SELECT id, name,  price FROM products WHERE name LIKE '%' || $3 || '%' LIMIT $1 OFFSET $2",
+		count, start, searchText)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	products := []product{}
+
+	for rows.Next() {
+		var p product
+		if err := rows.Scan(&p.ID, &p.Name, &p.Price); err != nil {
+			return nil, err
+		}
+		products = append(products, p)
+	}
+
+	return products, nil
+}
+
 func (p *product) getProduct(db *sql.DB) error {
 	return db.QueryRow("SELECT name, price FROM products WHERE id=$1",
 		p.ID).Scan(&p.Name, &p.Price)
