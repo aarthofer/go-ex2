@@ -197,6 +197,29 @@ func TestCatsToPower(t *testing.T) {
 	checkResponseCode(t, http.StatusOK, response.Code)
 }
 
+func TestSearchProducts(t *testing.T) {
+	clearTable()
+	addProducts(2)
+
+	req, _ := http.NewRequest("GET", "/products", nil)
+	response := executeRequest(req)
+	checkResponseCode(t, http.StatusOK, response.Code)
+
+	var unfiltered []map[string]interface{}
+	json.Unmarshal(response.Body.Bytes(), &unfiltered)
+
+	req, _ = http.NewRequest("GET", "/product/search/1", nil)
+	response = executeRequest(req)
+	checkResponseCode(t, http.StatusOK, response.Code)
+
+	var filtered []map[string]interface{}
+	json.Unmarshal(response.Body.Bytes(), &filtered)
+
+	if len(filtered) == len(filtered) {
+		t.Errorf("filtered and unfiltered list have same length!")
+	}
+}
+
 func ensureTableExists() {
 	if _, err := a.DB.Exec(tableCreationQuery); err != nil {
 		log.Fatal(err)
