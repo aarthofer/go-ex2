@@ -45,4 +45,10 @@ jobs:
         which migrate
 
     - name: Test
-      run: go test -v
+      run: go test -json > report.json -coverprofile=coverage.out
+      
+    - name: Analyze with SonarCloud
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
