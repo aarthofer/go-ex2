@@ -1,5 +1,7 @@
 [![ci-test](https://github.com/aarthofer/go-ex2/actions/workflows/go.yml/badge.svg)](https://github.com/aarthofer/go-ex2/actions/workflows/go.yml)
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=aarthofer_go-ex2&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=aarthofer_go-ex2)
+
 # go-mux: Microservice in GoTutorial
 
 - Tutorial from [semaphoreci.com](https://semaphoreci.com/community/tutorials/building-and-testing-a-rest-api-in-go-with-gorilla-mux-and-postgresql)
