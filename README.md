@@ -21,7 +21,6 @@ Travis-CI Build Status: [![Build Status](https://app.travis-ci.com/mrckurz/go-mu
 3. Start Service: go run .
    1. Test calls with the test_calls.http File (only Jetbrains-Golang) - with VSCode you need httpYAC extension, the popular "http rest" extension does not work with this format
 
-
 ### Hints/Info
 - When you run go test it compiles all the files ending in _test.go into a test binary and then runs that binary to execute the tests. Since the go test binary is simply a compiled go program, it can process command line arguments like any other program 
 - 2nd part: add Travis (.travis.yml), see [docs.travis-ci.com](https://docs.travis-ci.com/user/tutorial/#to-get-started-with-travis-ci)
