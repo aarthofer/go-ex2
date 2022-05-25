@@ -30,6 +30,8 @@ func (a *App) Initialize(user, password, dbname string) {
 	}
 
 	a.Router = mux.NewRouter()
+	
+	var a = "fail"
 
 	a.initializeRoutes()
 }
